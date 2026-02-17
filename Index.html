@@ -1,0 +1,203 @@
+<!DOCTYPE html> 
+<html>
+<head>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style> 
+
+
+    * {
+      margin: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      
+      background-color: rgb(32,32,32);
+      min-height: 100vh;
+      padding: 20px;
+    }
+
+    /* --- GALLERY --- */
+    .gallery-title {
+      font-size: 2.2rem;
+      margin-bottom: 15px;
+      color: rgb(225, 197, 167);
+    }
+
+    .gallery {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 15px;
+    }
+
+    .gallery img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 2px solid rgb(225, 197, 167);
+      cursor: pointer;
+      transition: 0.2s;
+    }
+
+    .gallery img:hover {
+      transform: scale(1.05);
+      opacity: 0.85;
+    }
+
+    /* --- POPUP LIGHTBOX --- */
+    #popup {
+      display: none;
+      position: fixed;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      animation: fadeIn 0.25s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    #popup-img {
+      max-width: 85%;
+      max-height: 85%;
+      border-radius: 10px;
+      border: 3px solid rgb(225, 197, 167);
+      box-shadow: 0 0 20px black;
+    }
+
+    /* Close Button */
+    .close-btn {
+      position: fixed;
+      top: 20px;
+      right: 30px;
+      font-size: 40px;
+      color: rgb(225, 197, 167);
+      cursor: pointer;
+      user-select: none;
+      z-index: 1100;
+    }
+
+    /* Navigation Arrows */
+    .arrow {
+      position: fixed;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 60px;
+      color: rgb(225, 197, 167);
+      cursor: pointer;
+      user-select: none;
+      padding: 10px 20px;
+      z-index: 1100;
+      transition: 0.2s;
+    }
+
+    .arrow:hover {
+      color: white;
+      transform: translateY(-50%) scale(1.15);
+    }
+
+    .left-arrow { left: 20px; }
+    .right-arrow { right: 20px; }
+.audio {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background-color: rgb(225, 197, 167); 
+    color: black;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 10px;
+    font-size: 1.2em;
+    cursor: pointer;
+
+
+  </style>
+</head>
+
+<body>
+
+  <h2 class="gallery-title">My Arteorks</h2>
+
+  <div class="gallery">
+  <figure>
+    <img src="ilistration_gallary/image_1.png">
+	 <figcaption> The mighty right hand of the Dragon King!</figcaption>
+ 
+  
+
+  </div>
+  <!-- POPUP -->
+  <div id="popup">
+    <span class="close-btn" id="closeBtn">&times;</span>
+    <span class="arrow left-arrow" id="leftArrow">&#10094;</span>
+    <img id="popup-img" src="">
+    <span class="arrow right-arrow" id="rightArrow">&#10095;</span>
+  </div>
+
+  <script>
+    const images = document.querySelectorAll('.gallery img');
+    const popup = document.getElementById('popup');
+    const popupImg = document.getElementById('popup-img');
+
+    const closeBtn = document.getElementById('closeBtn');
+    const leftArrow = document.getElementById('leftArrow');
+    const rightArrow = document.getElementById('rightArrow');
+
+    let currentIndex = 0;
+
+    function openPopup(index) {
+      currentIndex = index;
+      popupImg.src = images[index].src;
+      popup.style.display = 'flex';
+    }
+
+    function closePopup() {
+      popup.style.display = 'none';
+    }
+
+    function showNext() {
+      currentIndex = (currentIndex + 1) % images.length;
+      popupImg.src = images[currentIndex].src;
+    }
+
+    function showPrev() {
+      currentIndex = (currentIndex - 1 + images.length) % images.length;
+      popupImg.src = images[currentIndex].src;
+    }
+
+    images.forEach((img, index) => {
+      img.addEventListener('click', () => openPopup(index));
+    });
+
+    closeBtn.addEventListener('click', closePopup);
+    rightArrow.addEventListener('click', showNext);
+    leftArrow.addEventListener('click', showPrev);
+
+    // Close when clicking outside the image
+    popup.addEventListener('click', (e) => {
+      if (e.target === popup) closePopup();
+    });
+
+    // Keyboard controls
+    document.addEventListener('keydown', (e) => {
+      if (popup.style.display === 'flex') {
+        if (e.key === 'ArrowRight') showNext();
+        if (e.key === 'ArrowLeft') showPrev();
+        if (e.key === 'Escape') closePopup();
+      }
+    });
+function playAudio() {
+    const audio = document.getElementById("bgm");
+    audio.play().catch(e => console.log("Playback was prevented:", e));
+}
+
+  </script>
+
+</body>
+  </html>
